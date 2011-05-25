@@ -1,23 +1,36 @@
-
-;; Generic Genetic Algorithm Solving
+;; Generic Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun zip (a b)
   (cond ((or (null a) (null b)) '())
-        (t (cons (list (car a) (car b)) (zip (cdr a) (cdr b))))))
+        (t (cons (list (car a) (car b))
+                 (zip (cdr a) (cdr b))))))
 
-(defun compare-fst (a b)
-  (< (car a) (car b)))
+(defun gt-fst (a b)
+  (> (car a) (car b)))
+
+;; Generic Genetic Algorithm Solving
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (defun solve (pop fit)
-  (let ((ranked (sort (zip (map #'fit pop) pop) :key compare-fst ))
-        )))
+  (solve-generation pop fit 50 0))
+
+(defun solve-generation (pop fit max-generation generation-count)
+  (cond ((= max-generation generation-count) pop)
+        (t (let ((ranked (sort (zip (map #'fit pop) pop) :key gt-fst ))
+                 (new-pop (gen-pop ranked '())))
+             (solve-generation new-pop fit max-generation (1+ generation-count))))))
+
+(defun gen-pop (sorted new-pop)
+  (cond ((= (length sorted) (length new-pop))
+         new-pop)
+        (t (gen-pop sorted (cons (new-child sorted) (new-pop))))))
 
 (defun new-child (sorted)
   (let* ((a (select-parent sorted))
          (b (select-parent (remove a sorted :test #'(lambda (x y) (eql (cadr y) x))))))
-    ;; (reproduce a b)))
-    (format t "Parent A: ~A      Parent B: ~A~%" a b)))
+    (format t "Parent A: ~A      Parent B: ~A~%" a b)
+    (reproduce a b)))
 
 (defun select-parent (sorted)
   (let* ((x (random (length sorted)))
