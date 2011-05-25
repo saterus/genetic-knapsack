@@ -1,29 +1,3 @@
-;; Notes:
-;;  - Run using "clisp ga_knapsack.lisp". I recommend a large terminal
-;; to see pretty-display for the output.
-;;
-;;  - Tweaking parameters for *num-generations*, *ks-size*,
-;; *ks-overstuff-penalty* should drastically change the results of the
-;; program. I found the current parameters to be fairly good.
-;;
-;;
-;; Improvements:
-;;  - Make parameters into command line arguments.
-;;
-;;  - Create new knapsack item files, with different values to test
-;; with.
-;;
-;;  - Parse a more human readable format for reading item files. Using
-;; a lisp file with item structs in it feels like cheating.
-;;
-;;  - Create alternate solve- function for running until convergence
-;; in the population is detected.
-;;
-;;  - Separate helper functions, genetic algorithm base, and knapsack
-;; problem into different modules.
-;;
-
-
 ;; Generic Helper Functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
