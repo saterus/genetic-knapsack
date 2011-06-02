@@ -33,7 +33,7 @@
     (cond ((= max-generation generation-count) pop)
           (t (let* ((paired (zip (mapcar fit pop) pop))
                     (ranked (sort paired #'> :key #'car ))
-                    ((new-pop (gen-pop ranked '()))))
+                    (new-pop (gen-pop ranked '())))
                (solve-generation new-pop fit max-generation (1+ generation-count))))))
 
 ;; Generate the new population out of the new children.
@@ -137,9 +137,7 @@
 ;; f(s) = sack-value                                     | if (*ks-size* - sack-size) >= 0
 ;; f(s) = over_const(*ks-size* - sack-size) + sack-value | otherwise
 (defun ks-fitness (state)
-  (let* ((sack (items-in-sack state))
-         (sSize (sack-size sack))
-         (sValue (sack-value sack)))
+  (let ((sack (items-in-sack state)))
     (cond ((> (sack-size sack) *ks-size*)
            (+ (* *ks-overstuff-penalty*
                  (- *ks-size* (sack-size sack)))
@@ -170,4 +168,5 @@
     (zip (mapcar #'ks-fitness solns) solns)))
 
 (defun main ()
-  (print-solutions (solve-new *ks-pop-size*)))
+  (print-solutions (solve-new *ks-pop-size*))
+  (quit))
