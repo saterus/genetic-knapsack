@@ -30,11 +30,11 @@
 ;; Run the algorithm a maximum number of generations, then return the
 ;; current population. Alternatively, we could run until a convergence.
 (defun solve-generation (pop fit max-generation generation-count)
-  (let* ((paired (zip (mapcar fit pop) pop))
-                 (ranked (sort paired #'> :key #'car )))
     (cond ((= max-generation generation-count) pop)
-          (t (let ((new-pop (gen-pop ranked '())))
-               (solve-generation new-pop fit max-generation (1+ generation-count)))))))
+          (t (let* ((paired (zip (mapcar fit pop) pop))
+                    (ranked (sort paired #'> :key #'car ))
+                    ((new-pop (gen-pop ranked '()))))
+               (solve-generation new-pop fit max-generation (1+ generation-count))))))
 
 ;; Generate the new population out of the new children.
 (defun gen-pop (sorted new-pop)
@@ -169,4 +169,5 @@
   (let ((solns (solve *ks-pop* #'ks-fitness)))
     (zip (mapcar #'ks-fitness solns) solns)))
 
-(print-solutions (solve-new *ks-pop-size*))
+(defun main ()
+  (print-solutions (solve-new *ks-pop-size*)))
